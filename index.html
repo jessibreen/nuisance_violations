@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<!-- add a title for the overall map page here -->
+		<title>Lexington Nuisance Violations</title>
+	
+		<!-- Mapbox js -->
+		<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
+
+		<!-- Mapbox stylesheet -->
+		<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+		<!-- JQuery -->
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+		<!-- Latest compiled and minified Bootstrap -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+		<!-- Mapbox version of Leaflet Markercluster js -->
+		<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js'></script>
+
+		<!-- Mapbox version of Leaflet Markercluster CSS files -->
+		<link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+		<link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+	
+		<!-- Stamen Tiles -->
+		<script src="http://maps.stamen.com/js/tile.stamen.js"></script>
+	
+			<style>
+				html, body, #map {
+					height: 100%;
+					width: 100%;
+					padding: 0;
+					margin: 0;
+				}
+				.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
+					background-color: rgba(141, 158, 226, 0.6);
+				}
+				.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div  {
+					background-color: rgba(0, 51, 160, 0.6);
+				}
+				.panel-fixed {
+					position: absolute;
+					bottom: 15px;
+					right: 15px;
+					margin-left: 60px;
+					width: 410px;
+					text-align: center;
+					z-index: 50;
+				}
+				.legend {
+				line-height: 18px;
+				color: #333333;
+				font-family: 'Open Sans', Helvetica, sans-serif;
+				padding: 6px 8px;
+				background: white;
+				background: rgba(255,255,255,0.8);
+				box-shadow: 0 0 15px rgba(0,0,0,0.2);
+				border-radius: 5px;
+				}
+
+				.legend i {
+					width: 18px;
+					height: 18px;
+					float: left;
+					margin-right: 8px;
+					opacity: 0.7;
+				}
+
+				.legend img {
+					width: 18px;
+					height: 18px;
+					float: left;
+				}
+
+				.legend p {
+					font-size: 12px;
+					line-height: 18px;
+					margin: 0;
+				}
+			</style>
+	</head>
+<body>
+
+<div class="panel group">
+	<div class="panel panel-primary panel-fixed">
+		<div class="panel-heading">
+			<h3 class="panel-title"><span class="title">Lexington Nuisance Violations - 2015</span>  <a data-toggle="collapse" href="#collapse1"><span class="glyphicon glyphicon-chevron-down"></span></a>
+			</h3>
+		</div>
+		<div id="collapse1" class="panel-collapse collapse">
+			<div class="panel-body">
+				<span class="description"></span>
+			 	 		Lexington Code Enforcement Cases<br>
+						This map depicts the distribution of Nuisance Violation cases across all of Lexington-Fayette as well as providing information about the individual cases.<br>
+						The data for this map is available from <a href="http://www.civicdata.com/organization/lexington-ky">CivicData</a>.
+					</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<div id="map"></div>
+	<script>
+
+	// Add baselayer
+	var baseLayer = new L.StamenTileLayer("toner-lite");
+
+	// Create Leaflet Control Object for Legend
+	var legend = L.control({position: 'topright'});
+
+	// Function that runs when legend is added to map
+	legend.onAdd = function (map) {
+
+		// Create Div Element and Populate it with HTML
+		var div = L.DomUtil.create('div', 'legend');
+		div.innerHTML += '<b>Violation Density</b><br />';
+		div.innerHTML += 'by Census Tract<br />';
+		div.innerHTML += '<small>Violations/100 Addresses</small><br />';
+		div.innerHTML += '<i style="background: #a50f15"></i><p>13+</p>';
+		div.innerHTML += '<i style="background: #de2d26"></i><p>10-13</p>';
+		div.innerHTML += '<i style="background: #fb6a4a"></i><p>7-10</p>';
+		div.innerHTML += '<i style="background: #fcae91"></i><p>3-7</p>';
+		div.innerHTML += '<i style="background: #fee5d9"></i><p>0-3</p>';
+		/*div.innerHTML += '<hr>Individual Violations';
+		div.innerHTML += '<br /><img src="images/rodent_open.png">Cited';
+		div.innerHTML += '<br /><img src="images/rodent.png">Corrected';*/
+
+
+		// Return the Legend div containing the HTML content
+		return div;
+	};
+
+	var dataLayer = null;
+
+	//add datalayer layer
+ 	$.getJSON("data/codenorm.geojson", function(data) {
+		dataLayer = L.geoJson(data, {style: style});
+		// Set function for color ramp
+		function setColor(density) {
+				 return density > 13 ? '#a50f15' :
+					 density > 10 ? '#de2d26' :
+					 density > 7 ? '#fb6a4a' :
+					 density > 3 ? '#fcae91' :
+					 '#fee5d9';
+			 };
+
+			 // Set style function that sets fill color property equal to rodent density
+			 function style(feature) {
+			 return {
+			 fillColor: setColor(feature.properties.nuis100),
+			 fillOpacity: 0.7,
+			 weight: 2,
+			 opacity: 1,
+			 color: '#ffffff',
+			 dashArray: '3'
+			 }
+			 };
+	});
+	//define the cluster layer
+	var markers = L.markerClusterGroup({
+		//spiderfyOnMaxZoom: false,
+		showCoverageOnHover: false,
+	});
+
+	//get geojson
+	$.getJSON("data/nuisance2015.geojson", function(data) {
+		var geojson = L.geoJson(data, {
+			pointToLayer: function (feature, latlng) {
+				return L.circleMarker (latlng, {
+					radius: 4,
+					fillColor: "#2eb8b8",
+					color: "#000",
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			},
+			onEachFeature: function (feature, layer) {
+				/*// USE A CUSTOM MARKER
+				layer.setIcon(L.mapbox.marker.icon({'marker-symbol': 'circle-stroked', 'marker-color': '59245f'}));*/
+
+				//add popup
+				var props = layer.feature.properties;
+				layer.bindPopup("<b>" + "Address: " + "</b>" + props.Address + "<br>" + "<b>" + "Date Opened: " + "</b>" + props.DateOpened + "<br>" + "<b>" + "Outcome: " + "</b>" + props.Status);
+			}
+		});
+
+		markers.addLayer(geojson);
+
+		//add the map
+		var map = L.map('map', {maxZoom: 20}).fitBounds(markers.getBounds());
+		baseLayer.addTo(map);
+		dataLayer.addTo(map);
+		markers.addTo(map);
+		legend.addTo(map);
+	});
+
+	</script>
+</body>
+</html>
