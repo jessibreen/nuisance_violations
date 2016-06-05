@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<!-- add a title for the overall map page here -->
-		<title>Lexington Nuisance Violations</title>
+		<title>Lexington Code Violations</title>
 	
 		<!-- Mapbox js -->
 		<script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js'></script>
@@ -92,14 +92,14 @@
 <div class="panel group">
 	<div class="panel panel-primary panel-fixed">
 		<div class="panel-heading">
-			<h3 class="panel-title"><span class="title">Lexington Nuisance Violations - 2015</span>  <a data-toggle="collapse" href="#collapse1"><span class="glyphicon glyphicon-chevron-down"></span></a>
+			<h3 class="panel-title"><span class="title">Lexington Code Violations</span>  <a data-toggle="collapse" href="#collapse1"><span class="glyphicon glyphicon-chevron-down"></span></a>
 			</h3>
 		</div>
 		<div id="collapse1" class="panel-collapse collapse">
 			<div class="panel-body">
 				<span class="description"></span>
 			 	 		Lexington Code Enforcement Cases<br>
-						This map depicts the distribution of Nuisance Violation cases across all of Lexington-Fayette as well as providing information about the individual cases.<br>
+						This map depicts the distribution of cases across all of Lexington-Fayette as well as providing information about the individual cases.<br>
 						The data for this map is available from <a href="http://www.civicdata.com/organization/lexington-ky">CivicData</a>.
 					</span>
 			</div>
@@ -171,7 +171,7 @@
 	});
 
 	//get geojson
-	$.getJSON("data/nuisance2015.geojson", function(data) {
+	$.getJSON("data/violations.geojson", function(data) {
 		var geojson = L.geoJson(data, {
 			pointToLayer: function (feature, latlng) {
 				return L.circleMarker (latlng, {
